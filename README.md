@@ -3,13 +3,7 @@
 Smart travel guide for Kazakhstan — build day-by-day itineraries by city, budget, and interests.
 552 places across 22 cities. AI-powered recommendations. Genetic route optimization.
 
-## Team
 
-| Name | GitHub |
-|------|--------|
-| Amina Zhumatayeva | @Aminasssssss |
-| Sandugash Kelgenbayeva | @sleepiingatlast |
-| Ayana Nauryzbayeva | @Ayanan2022 |
 
 ## Tech Stack
 
