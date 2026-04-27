@@ -1,0 +1,51 @@
+<div class="page">
+  <nav class="navbar">
+    <div class="nav-brand" (click)="router.navigate(['/'])">KZ Travel</div>
+    <div class="nav-links">
+      <a (click)="router.navigate(['/'])">Главная</a>
+      <a (click)="router.navigate(['/planner'])">Новый маршрут</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="page-header">
+      <div>
+        <div class="section-label">Личный кабинет</div>
+        <h1>Мои поездки</h1>
+      </div>
+      <button class="btn-new" (click)="router.navigate(['/planner'])">
+        + Новый маршрут
+      </button>
+    </div>
+
+    @if (itineraries.length === 0) {
+      <div class="empty">
+        <div class="empty-icon-wrap"></div>
+        <h3>Маршрутов пока нет</h3>
+        <p>Запланируйте первое путешествие по Казахстану</p>
+        <button class="btn-plan" (click)="router.navigate(['/planner'])">
+          Спланировать поездку
+        </button>
+      </div>
+    } @else {
+      <div class="trips-grid">
+        @for (trip of itineraries; track trip.id) {
+          <div class="trip-card">
+            <div class="trip-card-top">
+              <div class="trip-dest">{{ trip.destination?.name }}</div>
+              <button class="btn-delete" (click)="delete(trip.id)">×</button>
+            </div>
+            <h3>{{ trip.title }}</h3>
+            <div class="trip-meta">
+              <span>{{ trip.duration_days }} дней</span>
+              <span>{{ trip.budget_level }}</span>
+            </div>
+            <button class="btn-view" (click)="router.navigate(['/itinerary', trip.id])">
+              Открыть маршрут
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="page">
+  <nav class="navbar">
+    <div class="nav-brand">KZ Travel</div>
+    <div class="nav-badge">Общий маршрут</div>
+  </nav>
+
+  @if (loading) {
+    <div class="message">Загрузка...</div>
+  } @else if (error) {
+    <div class="message error">{{ error }}</div>
+  } @else if (itinerary) {
+    <div class="content">
+      <div class="page-header">
+        <div class="section-label">{{ itinerary.destination?.name }}</div>
+        <h1>{{ itinerary.title }}</h1>
+        <div class="meta">
+          <span>{{ itinerary.duration_days }} дней</span>
+          <span>{{ itinerary.budget_level }}</span>
+        </div>
+      </div>
+
+      @for (day of itinerary.days; track day.id) {
+        <div class="day-card">
+          <div class="day-header">
+            <span class="day-num">День {{ day.day_number }}</span>
+            @if (day.transport_note) {
+              <span class="transport">{{ day.transport_note }}</span>
+            }
+          </div>
+          <div class="places-list">
+            @for (place of day.places; track place.id) {
+              <div class="place-item">
+                <div class="place-order">{{ $index + 1 }}</div>
+                <div class="place-info">
+                  <h4>{{ place.name }}</h4>
+                  <p>{{ place.description }}</p>
+                </div>
+                <div class="place-meta">
+                  <span class="rating">{{ place.rating }}</span>
+                  <span class="price price-{{ place.price_level }}">{{ place.price_level }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

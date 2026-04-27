@@ -1,0 +1,88 @@
+<div class="page">
+  <nav class="navbar">
+    <div class="nav-brand" (click)="router.navigate(['/'])">KZ Travel</div>
+    <div class="nav-links">
+      <a (click)="router.navigate(['/'])">Главная</a>
+      <a (click)="router.navigate(['/destinations'])">Направления</a>
+      <a (click)="router.navigate(['/my-trips'])">Мои поездки</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="planner-card">
+      <div class="planner-header">
+        <div class="section-label">Планировщик</div>
+        <h1>Создайте маршрут</h1>
+        <p class="subtitle">Расскажите о предпочтениях — мы составим идеальный план</p>
+      </div>
+
+      <div class="form-group">
+        <label>Город</label>
+        <select [(ngModel)]="selectedDestination">
+          @for (dest of destinations; track dest.id) {
+            <option [value]="dest.id">{{ dest.name }}</option>
+          }
+        </select>
+        @if (selectedDestination) {
+          <a class="events-link" (click)="router.navigate(['/city', selectedDestination, 'events'])">
+            Смотреть афишу города
+          </a>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>
+          Продолжительность
+          <span class="label-value">{{ selectedDays }} {{ selectedDays === 1 ? 'день' : selectedDays < 5 ? 'дня' : 'дней' }}</span>
+        </label>
+        <input type="range" min="1" max="10" [(ngModel)]="selectedDays" />
+        <div class="range-labels">
+          <span>1 день</span>
+          <span>10 дней</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Бюджет</label>
+        <div class="budget-options">
+          <div class="budget-option" [class.active]="selectedBudget === 'budget'"
+               (click)="selectedBudget = 'budget'">
+            <span class="budget-icon budget-icon--green"></span>
+            Бюджетный
+          </div>
+          <div class="budget-option" [class.active]="selectedBudget === 'mid'"
+               (click)="selectedBudget = 'mid'">
+            <span class="budget-icon budget-icon--yellow"></span>
+            Средний
+          </div>
+          <div class="budget-option" [class.active]="selectedBudget === 'luxury'"
+               (click)="selectedBudget = 'luxury'">
+            <span class="budget-icon budget-icon--terra"></span>
+            Люкс
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Интересы</label>
+        <div class="interests-grid">
+          @for (interest of interests; track interest.value) {
+            <div class="interest-chip"
+                 [class.active]="isSelected(interest.value)"
+                 (click)="toggleInterest(interest.value)">
+              {{ interest.label }}
+            </div>
+          }
+        </div>
+      </div>
+
+      @if (error) {
+        <div class="error">{{ error }}</div>
+      }
+
+      <button class="btn-generate" (click)="generate()" [disabled]="loading">
+        {{ loading ? 'Создаём маршрут...' : 'Создать маршрут' }}
+      </button>
+    </div>
+  </div>
+</div>

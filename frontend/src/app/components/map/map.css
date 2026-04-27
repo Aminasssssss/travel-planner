@@ -1,0 +1,54 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.map-container {
+  height: 500px;
+  width: 100%;
+  border-radius: var(--r-lg, 16px);
+  overflow: hidden;
+  z-index: 1;
+  position: relative;
+}
+
+.heatmap-toggle {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+  background: white;
+  border: 1px solid var(--border, #E5DDD4);
+  padding: 7px 16px;
+  border-radius: var(--r-sm, 8px);
+  font-size: 0.78rem;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-1, #1C1917);
+  cursor: pointer;
+  transition: background 150ms, border-color 150ms;
+  box-shadow: 0 2px 8px rgba(28,25,23,.08);
+}
+
+.heatmap-toggle:hover {
+  background: var(--surface-2, #F0EAE0);
+  border-color: var(--border-2, #D4C9BC);
+}
+
+::ng-deep .leaflet-container {
+  background: var(--surface-2, #F0EAE0);
+  z-index: 1;
+  font-family: 'Inter', sans-serif;
+}
+
+::ng-deep .leaflet-popup-content-wrapper {
+  border-radius: var(--r-lg, 16px);
+  border: 1px solid var(--border, #E5DDD4);
+  box-shadow: 0 8px 24px rgba(28,25,23,.1);
+}
+
+::ng-deep .leaflet-popup-content {
+  margin: 14px;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-1, #1C1917);
+}

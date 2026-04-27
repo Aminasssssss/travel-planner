@@ -1,0 +1,156 @@
+<div class="page">
+
+  @if (successMessage) {
+    <div class="toast">{{ successMessage }}</div>
+  }
+
+  <nav class="navbar">
+    <div class="nav-brand" (click)="router.navigate(['/'])">KZ Travel</div>
+    <div class="nav-links">
+      <a (click)="router.navigate(['/my-trips'])">Мои поездки</a>
+      <a (click)="router.navigate(['/planner'])">Новый маршрут</a>
+    </div>
+  </nav>
+
+  @if (itinerary) {
+    <div class="hero">
+      <div class="hero-info">
+        <div class="hero-top-row">
+          <div class="hero-region">{{ itinerary.destination?.name }}</div>
+          <div class="hero-meta-row">
+            <span class="meta-chip">{{ itinerary.duration_days }} дней</span>
+            <span class="meta-chip">{{ itinerary.budget_level }}</span>
+          </div>
+        </div>
+
+        <h1>{{ itinerary.title }}</h1>
+
+        <div class="hero-actions-row">
+          <button class="btn-analysis" (click)="router.navigate(['/itinerary', itinerary.id, 'analysis'])">
+            Анализ маршрута
+          </button>
+          @if (itinerary?.destination?.id) {
+            <button class="btn-events" (click)="router.navigate(['/city', itinerary.destination.id, 'events'])">
+              Афиша
+            </button>
+          }
+          @if (!itinerary.is_public) {
+            <button class="btn-share" (click)="shareItinerary()" [disabled]="loading">
+              {{ loading ? '...' : 'Поделиться' }}
+            </button>
+          } @else {
+            <button class="btn-unshare" (click)="unshareItinerary()">Закрыть доступ</button>
+          }
+          <button class="btn-delete" (click)="delete()">Удалить</button>
+        </div>
+
+        @if (itinerary.is_public && shareUrl) {
+          <div class="share-link" (click)="copyLink()">
+            {{ shareUrl }}<span class="copy-hint">Копировать</span>
+          </div>
+        }
+        @if (error) {
+          <span class="share-error">{{ error }}</span>
+        }
+      </div>
+    </div>
+
+    @if (itinerary?.days) {
+      <div class="map-wrap">
+        <div class="map-inner">
+          <app-map [places]="getAllPlaces()" [itineraryDays]="itinerary.days"></app-map>
+        </div>
+      </div>
+    }
+
+    <div class="content">
+      @for (day of itinerary.days; track day.id) {
+        <div class="day-card">
+          <div class="day-header">
+            <div class="day-title-row">
+              <span class="day-num">День {{ day.day_number }}</span>
+              @if (day.transport_note) {
+                <span class="transport">{{ day.transport_note }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="places-list">
+            @for (place of day.places; track place.id) {
+              <div class="place-item">
+                <div class="place-order">{{ $index + 1 }}</div>
+                <div class="place-info">
+                  <h4>{{ place.name }}</h4>
+                  <p>{{ place.description }}</p>
+                </div>
+                <div class="place-meta">
+                  <span class="rating">{{ place.rating }}</span>
+                  <span class="price price-{{ place.price_level }}">{{ place.price_level }}</span>
+                  <div class="place-actions">
+                    <button class="btn-remove" (click)="removePlace(day.day_number, place.id)">
+                      Удалить
+                    </button>
+                    <select class="select-move" (change)="movePlace(day.day_number, place.id, $event)">
+                      <option value="">Переместить...</option>
+                      @for (d of itinerary.days; track d.day_number) {
+                        @if (d.day_number !== day.day_number) {
+                          <option [value]="d.day_number">День {{ d.day_number }}</option>
+                        }
+                      }
+                    </select>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+
+          <button class="btn-add-place" (click)="openAddPlaceModal(day.day_number)">
+            + Добавить место
+          </button>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="loading">Загрузка маршрута...</div>
+  }
+
+  @if (showAddModal) {
+    <div class="modal-overlay" (click)="closeModal()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Добавить место — День {{ targetDay }}</h3>
+          <button class="modal-close" (click)="closeModal()">×</button>
+        </div>
+        <div class="modal-search">
+          <input
+            [(ngModel)]="searchQuery"
+            placeholder="Поиск мест..."
+            (keyup.enter)="searchPlaces()"
+            class="search-input"
+          />
+          <button class="btn-search" (click)="searchPlaces()">
+            {{ searchLoading ? '...' : 'Найти' }}
+          </button>
+        </div>
+        <div class="search-results">
+          @if (searchResults.length === 0 && !searchLoading) {
+            <p class="no-results">Введите название и нажмите Найти</p>
+          }
+          @for (place of searchResults; track place.id) {
+            <div class="result-item" (click)="addPlace(place.id)">
+              <div class="result-info">
+                <span class="result-name">{{ place.name }}</span>
+                <span class="result-desc">{{ place.description | slice:0:80 }}...</span>
+              </div>
+              <div class="result-meta">
+                <span class="result-rating">{{ place.rating }}</span>
+                <button class="btn-add-small">+</button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

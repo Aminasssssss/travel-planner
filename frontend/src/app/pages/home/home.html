@@ -1,0 +1,140 @@
+<div class="app">
+
+  <nav class="navbar">
+    <div class="nav-brand" (click)="router.navigate(['/'])">
+      <span class="brand-flag">KZ</span>
+      <span class="brand-text">Travel</span>
+    </div>
+    <div class="nav-links">
+      <a (click)="router.navigate(['/destinations'])">Destinations</a>
+      <a (click)="router.navigate(['/planner'])">Plan Trip</a>
+      @if (isLoggedIn()) {
+        <a (click)="router.navigate(['/my-trips'])">My Trips</a>
+        <button class="btn-outline" (click)="logout()">Logout</button>
+      } @else {
+        <button class="btn-outline" (click)="router.navigate(['/login'])">Login</button>
+        <button class="btn-primary" (click)="router.navigate(['/register'])">Sign Up</button>
+      }
+    </div>
+  </nav>
+
+  <section class="hero" style="background-image: url('/images/p0jmkr27.jpg');">
+    <div class="hero-content">
+      <div class="hero-tag">552 places · 22 cities</div>
+      <h1>Discover<br><em>Kazakhstan</em></h1>
+      <p>Day-by-day itineraries across steppes,<br>mountains and ancient cities</p>
+      <div class="hero-actions">
+        <button class="btn-hero" (click)="router.navigate(['/planner'])">
+          Plan My Trip
+          <span class="arrow">→</span>
+        </button>
+        <button class="btn-hero-ghost" (click)="router.navigate(['/destinations'])">
+          Explore cities
+        </button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-float">
+        <span class="float-icon">🏔️</span>
+        <span>Almaty</span>
+      </div>
+      <div class="hero-card-float delay-1">
+        <span class="float-icon">🕌</span>
+        <span>Turkestan</span>
+      </div>
+      <div class="hero-card-float delay-2">
+        <span class="float-icon">🌿</span>
+        <span>Astana</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-features">
+    <div class="feature-pill">AI-powered</div>
+    <div class="feature-pill">Genetic TSP optimization</div>
+    <div class="feature-pill">Burnout detector</div>
+    <div class="feature-pill">Real-time weather</div>
+    <div class="feature-pill">552 places</div>
+    <div class="feature-pill">22 cities</div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Where to go</div>
+    <h2>Popular Destinations</h2>
+    <div class="cards-grid">
+      @for (dest of destinations; track dest.id) {
+        <div class="card" (click)="router.navigate(['/destinations', dest.id])">
+          <div class="card-img" [style.backgroundImage]="getDestImage(dest.name)">
+            <span class="card-letter">{{ dest.name[0] }}</span>
+            <div class="card-overlay"></div>
+          </div>
+          <div class="card-body">
+            <h3>{{ dest.name }}</h3>
+            <p>{{ dest.description }}</p>
+            <span class="badge">{{ dest.season_best }}</span>
+          </div>
+          <div class="card-actions">
+            <button (click)="$event.stopPropagation(); router.navigate(['/destinations', dest.id])">
+              Explore
+            </button>
+            <button class="btn-events-card" (click)="$event.stopPropagation(); router.navigate(['/city', dest.id, 'events'])">
+              Events
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="section-dark">
+    <div class="section-inner">
+      <div class="section-label light">Top rated</div>
+      <h2>Places to visit</h2>
+      <div class="places-grid">
+        @for (place of popularPlaces; track place.id) {
+          <div class="place-card">
+            <div class="place-rating">⭐ {{ place.rating }}</div>
+            <h4>{{ place.name }}</h4>
+            <p>{{ place.description }}</p>
+            <span class="price-badge price-{{ place.price_level }}">
+              {{ place.price_level }}
+            </span>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">Simple process</div>
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon">🏙️</div>
+        <h4>Choose a city</h4>
+        <p>Pick from Almaty, Astana, Turkestan and more</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon">⚙️</div>
+        <h4>Set preferences</h4>
+        <p>Select days, budget and interests</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon">🗺️</div>
+        <h4>Get your plan</h4>
+        <p>Receive a day-by-day itinerary instantly</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">KZ Travel</div>
+      <p>KBTU Web Development 2026</p>
+    </div>
+  </footer>
+
+</div>

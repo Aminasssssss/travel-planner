@@ -1,0 +1,42 @@
+<div class="page">
+  <nav class="navbar">
+    <div class="nav-brand" (click)="router.navigate(['/'])">KZ Travel</div>
+    <div class="nav-links">
+      <a (click)="router.navigate(['/'])">Главная</a>
+      <a (click)="router.navigate(['/planner'])">Plan Trip</a>
+      <a (click)="router.navigate(['/my-trips'])">My Trips</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="page-header">
+      <div class="section-label">Казахстан</div>
+      <h1>Все направления</h1>
+      <p class="subtitle">Лучшие города и регионы для путешествия</p>
+    </div>
+
+    <div class="cards-grid">
+      @for (dest of destinations; track dest.id) {
+        <div class="card" (click)="router.navigate(['/destinations', dest.id])">
+          <div class="card-img">
+            <div class="card-img-overlay"></div>
+            <span class="card-season">{{ dest.season_best }}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-region">{{ dest.region }}</div>
+            <h3>{{ dest.name }}</h3>
+            <p>{{ dest.description }}</p>
+          </div>
+          <div class="card-footer">
+            <button (click)="$event.stopPropagation(); router.navigate(['/destinations', dest.id])">
+              Места
+            </button>
+            <button class="btn-events-small" (click)="$event.stopPropagation(); router.navigate(['/city', dest.id, 'events'])">
+              Афиша
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
